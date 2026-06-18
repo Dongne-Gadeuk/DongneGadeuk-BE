@@ -27,6 +27,10 @@ public class Stores {
     @Column(nullable = false, length = 100)
     private String storeName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Category category;
+
     @Column(nullable = false, length = 200)
     private String address;
 

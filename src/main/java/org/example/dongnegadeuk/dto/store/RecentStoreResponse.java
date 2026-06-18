@@ -1,13 +1,11 @@
 package org.example.dongnegadeuk.dto.store;
 
-import org.example.dongnegadeuk.dto.RecentStoreDto;
 
 import java.util.List;
 
+// 지도에서 최근 가게 카드 5개 띄우기
 public record RecentStoreResponse(
-        List<RecentStoreDto> stores,
-        int page,
-        int size,
-        boolean hasNext
+        Integer totalCount,
+        List<RecentStoreDto> stores
 ) {
 }
