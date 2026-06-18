@@ -28,7 +28,7 @@ public class Placements {
     @Column(nullable = false)
     private Integer y;
 
-    @Column(name = "zOrder", nullable = false)
+    @Column(nullable = false)
     private Integer zOrder;
 
     @Column(precision = 5, scale = 2, columnDefinition = "DECIMAL(5,2) DEFAULT 1.0")
