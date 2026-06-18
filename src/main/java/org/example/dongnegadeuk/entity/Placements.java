@@ -3,8 +3,8 @@ package org.example.dongnegadeuk.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -28,8 +28,8 @@ public class Placements {
     @Column(nullable = false)
     private Integer y;
 
-    @Column(nullable = false)
-    private Integer order;
+    @Column(name = "zOrder", nullable = false)
+    private Integer zOrder;
 
     @Column(precision = 5, scale = 2, columnDefinition = "DECIMAL(5,2) DEFAULT 1.0")
     private BigDecimal scale;
