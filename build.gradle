@@ -59,6 +59,12 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    //Google Vision API
+    implementation platform('com.google.cloud:libraries-bom:26.43.0')
+    implementation 'com.google.cloud:google-cloud-vision'
+
+    implementation 'net.coobird:thumbnailator:0.4.20'
 }
 
 tasks.named('test') {

@@ -37,4 +37,6 @@ out/
 .vscode/
 
 application.yml
-.env
+google_vision_key.json
+src/main/java/org/example/dongnegadeuk/service/ReceiptAiVisionService.java
+src/main/java/org/example/dongnegadeuk/service/ReceiptClaudeVisionService.java
