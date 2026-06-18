@@ -29,4 +29,14 @@ public interface PlacementsRepository extends JpaRepository<Placements, Long> {
             "join fetch p.userItem ui " +
             "where ui.userItemId in :ids")
     List<Placements> findAllByUserItemIdIn(@Param("ids") List<Long> ids);
+
+    // 유저별, zOrder 오름차순(=z 작은 게 안쪽) + placementId 로 tie-break
+    @Query("select p from Placements p " +
+            "where p.userItem.user.userId = :userId " +
+            "order by p.zOrder asc, p.placementId asc")
+    List<Placements> findAllByUserIdOrderByZOrder(@Param("userId") Long userId);
+
+    // 배치 대상 유저들
+    @Query("select distinct p.userItem.user.userId from Placements p")
+    List<Long> findDistinctUserIds();
 }
