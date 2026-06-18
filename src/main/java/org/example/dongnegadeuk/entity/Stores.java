@@ -9,30 +9,30 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "stores")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class Users {
+public class Stores {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long storeId;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String username;
+    @Column(nullable = false, length = 100)
+    private String storeName;
 
-    @Column(length = 255)
-    private String password;
+    @Column(nullable = false, length = 200)
+    private String address;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String nickname;
+    @Column(length = 100)
+    private String merchantNumber;
 
-    @Column(length = 500)
-    private String refreshToken;
+    @Column(nullable = false, length = 100)
+    private String businessNumber;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -42,13 +42,17 @@ public class Users {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false, length = 200)
+    private String storeUrl;
+
     // FK
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Items> items = new ArrayList<>();
+
+    @OneToMany(mappedBy = "store")
     private List<Receipts> receipts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserItems> userItems = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserStoreVisits> storeVisits = new ArrayList<>();
 }
+
