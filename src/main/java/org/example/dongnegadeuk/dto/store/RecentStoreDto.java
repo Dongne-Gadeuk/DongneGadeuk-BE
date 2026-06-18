@@ -10,7 +10,6 @@ public record RecentStoreDto(
         String storeName,
         String address,
         Category category,
-        String storeUrl,
         Integer visitCount
 ) {
 }

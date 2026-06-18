@@ -39,4 +39,8 @@ public class UserStoreVisits {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
     private Stores store;
+
+    public void increaseVisitCount() {
+        this.visitCount++;   // ← 필드명은 본인 거에 맞게 (visitCount, count 등)
+    }
 }
