@@ -21,9 +21,9 @@ import static org.example.dongnegadeuk.common.exception.errorCode.ReceiptErrorCo
 @RequiredArgsConstructor
 @Service
 public class ReceiptService {
-
-    private final ReceiptAiVisionService geminiService;
-    private final ReceiptClaudeVisionService claudeService;
+//
+//    private final ReceiptAiVisionService geminiService;
+//    private final ReceiptClaudeVisionService claudeService;
     private final ReceiptUpstageVisionService upstageService;
 
     public ReceiptDto process(byte[] imageBytes) {

@@ -40,3 +40,5 @@ application.yml
 google_vision_key.json
 src/main/java/org/example/dongnegadeuk/service/ReceiptAiVisionService.java
 src/main/java/org/example/dongnegadeuk/service/ReceiptClaudeVisionService.java
+
+.env

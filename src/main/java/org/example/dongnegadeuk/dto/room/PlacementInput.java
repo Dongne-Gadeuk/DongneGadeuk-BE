@@ -1,4 +1,4 @@
-package org.example.dongnegadeuk.dto;
+package org.example.dongnegadeuk.dto.room;
 
 import java.math.BigDecimal;
 
