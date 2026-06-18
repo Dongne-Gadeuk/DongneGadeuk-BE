@@ -24,7 +24,7 @@ public class Items {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemId;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(nullable = false, unique = true, length = 200)
     private String itemName;
 
     @Column(nullable = false, unique = true, length = 200)
@@ -38,6 +38,7 @@ public class Items {
     @JoinColumn(name = "store_id", nullable = false)
     private Stores store;
 
+    @Builder.Default
     @OneToMany(mappedBy = "item")
     private List<UserItems> userItems = new ArrayList<>();
 }

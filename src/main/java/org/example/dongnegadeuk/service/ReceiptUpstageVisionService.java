@@ -48,7 +48,12 @@ public class ReceiptUpstageVisionService {
                     "properties", Map.of(
                             "businessNumber", Map.of(
                                     "type", "string",
-                                    "description", "사업자등록번호 또는 가맹점 고유 식별번호. 표준 형식(123-45-67890)이 아니어도 영수증에 적힌 그대로 추출."
+                                    "description", """
+                                        사업자등록번호. 숫자와 하이픈(-)만 포함된 값만 추출.
+                                        '사업자/고유번호:', '사업자번호:' 등 라벨 뒤에 슬래시(/)로 구분된 경우 슬래시 앞 부분만 사용.
+                                        예) '1018126409/6597-3822-8317' → '1018126409'
+                                        예) '101-81-26409/6597-3822-8317' → '101-81-26409'
+                                        """
                             ),
                             "storeName", Map.of(
                                     "type", "string",
@@ -56,15 +61,27 @@ public class ReceiptUpstageVisionService {
                             ),
                             "storeAddress", Map.of(
                                     "type", "string",
-                                    "description", "가맹점 주소"
+                                    "description", """
+                                        가맹점 도로명 주소. 건물번호까지만 포함하고 괄호 안 동/읍/면 등 행정동 정보는 제외.
+                                        예) '서울 종로구 대학로 130 (동숭동)' → '서울 종로구 대학로 130'
+                                        예) '서울특별시 강남구 테헤란로 123 (역삼동)' → '서울특별시 강남구 테헤란로 123'
+                                        """
                             ),
                             "transactionDate", Map.of(
                                     "type", "string",
-                                    "description", "거래 일시"
+                                    "description", """
+                                        거래 일시. 반드시 YYYY-MM-DD 형식으로만 출력. 시간은 버릴 것.
+                                        연도가 2자리면 2000년대로 변환. 예) 26 → 2026.
+                                        예) '26/04/19 16:35:38' → '2026-04-19'
+                                        예) '2023.07.12 19:33' → '2023-07-12'
+                                        """
                             ),
                             "totalAmount", Map.of(
                                     "type", "integer",
-                                    "description", "최종 결제 합계 금액. 금액(공급가액)+부가세=합계 형식이면 합계값 사용."
+                                    "description", """
+                                        최종 결제 합계 금액. 금액(공급가액)+부가세=합계 형식이면 합계값 사용.
+                                        숫자만, 쉼표/원 표시 없이. 예) 6,200원 → 6200
+                                        """
                             )
                     ),
                     "required", List.of("businessNumber", "storeName", "storeAddress", "transactionDate", "totalAmount")

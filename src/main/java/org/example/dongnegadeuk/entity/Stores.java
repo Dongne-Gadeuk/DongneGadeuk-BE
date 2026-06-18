@@ -34,9 +34,6 @@ public class Stores {
     @Column(nullable = false, length = 200)
     private String address;
 
-    @Column(length = 100)
-    private String merchantNumber;
-
     @Column(nullable = false, length = 100)
     private String businessNumber;
 
@@ -47,9 +44,6 @@ public class Stores {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
-
-    @Column(nullable = false, length = 200)
-    private String storeUrl;
 
     // FK
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)

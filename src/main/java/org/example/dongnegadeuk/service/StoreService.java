@@ -63,7 +63,6 @@ public class StoreService {
                     store.getStoreName(),
                     store.getAddress(),
                     store.getCategory(),
-                    store.getStoreUrl(),
                     visitCount
             ));
         }
