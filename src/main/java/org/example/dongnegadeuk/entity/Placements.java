@@ -5,7 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -31,18 +31,18 @@ public class Placements {
     @Column(nullable = false)
     private Integer order;
 
-    @Column(precision = 5, scale = 2, default = 1.0)
+    @Column(precision = 5, scale = 2, columnDefinition = "DECIMAL(5,2) DEFAULT 1.0")
     private BigDecimal scale;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false, default = false)
-    private Boolean topBottom;
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean topBottom = false;
 
-    @Column(nullable = false, default = false)
-    private Boolean leftRight;
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean leftRight = false;
 
     // FK
     @OneToOne(fetch = FetchType.LAZY)

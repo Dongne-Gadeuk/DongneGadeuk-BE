@@ -7,6 +7,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "items")
@@ -42,8 +44,4 @@ public class Items {
 
     @OneToMany(mappedBy = "item")
     private List<UserItems> userItems = new ArrayList<>();
-}
-
-public enum Category {
-    CAFE, RESTAURANT, ETC
 }
