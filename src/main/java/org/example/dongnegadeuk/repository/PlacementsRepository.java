@@ -16,6 +16,17 @@ public interface PlacementsRepository extends JpaRepository<Placements, Long> {
             "join fetch ui.item " +
             "where ui.user.userId = :userId")
     List<Placements> findAllByUserId(@Param("userId") Long userId);
-    Optional<Placements> findByUserItem_UserItemId(Long userItemId);
 
+    // updated/removed 대상 한 번에 로딩 + owner(user)까지 fetch → assertOwner 지연로딩 제거
+    @Query("select p from Placements p " +
+            "join fetch p.userItem ui " +
+            "join fetch ui.user " +
+            "where p.placementId in :ids")
+    List<Placements> findAllByIdInFetchOwner(@Param("ids") List<Long> ids);
+
+    // added 의 upsert 판별용 (userItemId 들로 기존 placement 일괄 조회)
+    @Query("select p from Placements p " +
+            "join fetch p.userItem ui " +
+            "where ui.userItemId in :ids")
+    List<Placements> findAllByUserItemIdIn(@Param("ids") List<Long> ids);
 }

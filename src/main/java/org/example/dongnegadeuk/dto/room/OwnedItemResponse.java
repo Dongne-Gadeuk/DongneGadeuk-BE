@@ -1,4 +1,4 @@
-package org.example.dongnegadeuk.dto;
+package org.example.dongnegadeuk.dto.room;
 
 import org.example.dongnegadeuk.entity.UserItems;
 

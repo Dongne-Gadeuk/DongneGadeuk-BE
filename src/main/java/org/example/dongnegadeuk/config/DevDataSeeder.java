@@ -27,76 +27,87 @@ public class DevDataSeeder implements CommandLineRunner {
     public void run(String... args) {
         log.info("====== DevDataSeeder 실행 시도 ======");
 
-        if (userItemsRepository.count() > 0) {
-            log.info("====== DB에 데이터가 이미 존재하여 시더를 스킵합니다. ======");
+        final Long TARGET_USER_ID = 3L;
+        final String BED_IMAGE_URL = "https://placehold.co/200x200/png?text=BED";
+
+        // 1) 로그인으로 생성된 유저 조회 (생성 X)
+        Users user = em.find(Users.class, TARGET_USER_ID);
+        if (user == null) {
+            log.warn("====== userId={} 유저가 아직 없어 시더를 스킵합니다 (로그인 후 재시도) ======", TARGET_USER_ID);
             return;
         }
 
-        // 1) 유저 생성
-        Users user = em.find(Users.class, 1L);
-        if (user == null) {
-            user = Users.builder()
-                    .username("test_user")
-                    .nickname("테스터")
-                    .password("password123!")
-                    .build();
-            em.persist(user);
+        // 2) 이 유저가 이미 아이템을 가지고 있으면 스킵
+        Long existing = em.createQuery(
+                        "select count(ui) from UserItems ui where ui.user.id = :uid", Long.class)
+                .setParameter("uid", TARGET_USER_ID)
+                .getSingleResult();
+        if (existing > 0) {
+            log.info("====== userId={} 에 이미 데이터가 있어 시더를 스킵합니다 ======", TARGET_USER_ID);
+            return;
         }
 
-        // 2) 상점 생성
-        Category defaultCategory = Category.values()[0];
-        Stores store = Stores.builder()
-                .storeName("마을 가구점")
-                .address("서울특별시 강남구 테헤란로 123")
-                .businessNumber("123-45-67890")
-                .storeUrl("https://example-store.com")
-                .category(defaultCategory)
-                .build();
-        em.persist(store);
+        // 3) 아이템은 카탈로그성 데이터 → 있으면 재사용, 없으면 상점+아이템 생성
+        Items item = em.createQuery(
+                        "select i from Items i where i.imageUrl = :url", Items.class)
+                .setParameter("url", BED_IMAGE_URL)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
 
-        // 3) 아이템 생성
-        Items item = Items.builder()
-                .itemName("기본 침대")
-                .imageUrl("https://placehold.co/200x200/png?text=BED")
-                .requiredVisitCount(0)
-                .store(store)
-                .build();
-        em.persist(item);
+        if (item == null) {
+            Stores store = Stores.builder()
+                    .storeName("마을 가구점")
+                    .address("서울특별시 강남구 테헤란로 123")
+                    .businessNumber("123-45-67890")
+                    .storeUrl("https://example-store.com")
+                    .category(Category.values()[0])
+                    .build();
+            em.persist(store);
 
-        // 4) 영수증 생성
+            item = Items.builder()
+                    .itemName("기본 침대")
+                    .imageUrl(BED_IMAGE_URL)
+                    .requiredVisitCount(0)
+                    .store(store)
+                    .build();
+            em.persist(item);
+            log.info("카탈로그(상점/아이템) 신규 생성");
+        } else {
+            //log.info("기존 카탈로그 아이템 재사용 (itemId={})", item.getId());
+        }
+
+        // 4) 영수증 (이미 존재하는 상점을 재사용)
         Receipts receipt = Receipts.builder()
                 .user(user)
-                .store(store)
+                .store(item.getStore())
                 .totalPrice("15000")
                 .visitedAt(LocalDateTime.now())
                 .build();
         em.persist(receipt);
 
-        // 5) 보유 아이템 매핑 (UserItems)
-        // 여기서는 이미 방에 기본 배치된 상태를 시뮬레이션하기 위해 placed를 true로 두고 시작하겠습니다.
+        // 5) 보유 아이템 매핑
         UserItems ui = UserItems.builder()
                 .user(user)
                 .item(item)
-                .placed(true) // 💡 초기 배치가 존재하므로 true 설정
+                .placed(true)
                 .receipt(receipt)
                 .build();
         em.persist(ui);
 
-        // 6) 💡 [추가] 방 배치 정보 데이터 생성 (Placements)
-        // 프론트엔드가 fetchRoom()을 호출할 때 반환해 줄 데이터 규격을 완성합니다.
+        // 6) 방 배치 정보
         Placements placement = Placements.builder()
-                .x(180)          // ROOM.w / 2 (중앙 배치)
-                .y(180)          // ROOM.h / 2 (중앙 배치)
-                .zOrder(1)       // 가장 안쪽 레이어
-                .scale(BigDecimal.valueOf(1.0)) // 기본 크기 비율 1.0
+                .x(180)
+                .y(180)
+                .zOrder(1)
+                .scale(BigDecimal.valueOf(1.0))
                 .topBottom(false)
                 .leftRight(false)
-                .userItem(ui)    // ⚠️ 위에서 생성한 보유 아이템 객체 매핑
+                .userItem(ui)
                 .build();
         em.persist(placement);
-        log.info("초기 가구 배치 데이터 생성 완료");
 
         em.flush();
-        log.info("====== DevDataSeeder 데이터 반영 완료! ======");
+        log.info("====== userId={} 에 mock 데이터 반영 완료! ======", TARGET_USER_ID);
     }
 }
