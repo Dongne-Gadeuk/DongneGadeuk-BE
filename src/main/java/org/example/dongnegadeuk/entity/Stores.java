@@ -47,6 +47,11 @@ public class Stores {
     @Column(nullable = false, length = 200)
     private String storeUrl;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Category category;
+
+
     // FK
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Items> items = new ArrayList<>();

@@ -27,10 +27,6 @@ public class Items {
     @Column(nullable = false, unique = true, length = 100)
     private String itemName;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Category category;
-
     @Column(nullable = false, unique = true, length = 200)
     private String imageUrl;
 
